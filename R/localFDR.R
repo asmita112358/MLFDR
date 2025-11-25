@@ -16,7 +16,7 @@
 #' @param eps stopping criteria for EM algorithm
 #' @param verbose logical, whether to print the log-likelihood at each iteration. Default is TRUE.
 #' @param method either "unicore" or "multicore", specifies whether parallelization should be used when estimating variances in two step EM. Is not used unless twostep = TRUE
-#' @returns A vector of local false discovery rates
+#' @returns A list consisting of two elements - lfdr, a vector of local false discovery rates and pi, the estimated mixture proportions
 #' @export
 #'
 #' @examples
@@ -87,13 +87,14 @@ localFDR <- function(alpha, beta, var_alpha, var_beta, lambda.init = NULL,
       t[,j] = pi[j] * dnorm(x[,1], mu[[j]][1], sqrt(sigma[j,,1,1])) * dnorm(x[,2], mu[[j]][2], sqrt(sigma[j,,2,2]))
     }
     lfdr <- (t[,1] + t[,2] + t[,3])/rowSums(t)
-
+    pi_em <- expand.grid(H_alpha = c(0,1), H_beta = c(0,1))
+    pi_em = data.frame(pi_em, prob = pi)
   }else{
     if(is.null(d1)) {stop("Please specify d1 for two-step MLFDR")}
     if(is.null(d2)) {stop("Please specify d2 for two-step MLFDR")}
     m = length(alpha)
-    fit_alpha = EM_fun.1(alpha, var_alpha, k = d1 + 1, epsilon = eps, maxit = 10000, method = method)
-    fit_beta = EM_fun.1(beta, var_beta, k = d2 + 1, epsilon = eps, maxit = 10000, method = method)
+    fit_alpha = EM_fun.1(alpha, var_alpha, k = d1 + 1, epsilon = eps, maxit = 10000, method = method, verbose = verbose)
+    fit_beta = EM_fun.1(beta, var_beta, k = d2 + 1, epsilon = eps, maxit = 10000, method = method, verbose = verbose)
     p_em = fit_alpha$lambda
     q_em = fit_beta$lambda
     mu_em = fit_alpha$mu
@@ -114,7 +115,6 @@ localFDR <- function(alpha, beta, var_alpha, var_beta, lambda.init = NULL,
     }
     h0 <- (pi_em$u)*(pi_em$v) == 0
     lfdr <- rowSums(z_em[,h0])/rowSums(z_em)
-
   }
-  return(lfdr = lfdr)
+  return(list(lfdr = lfdr, pi = pi_em))
 }

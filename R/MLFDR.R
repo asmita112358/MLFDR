@@ -51,7 +51,8 @@
 #' }
 
 #' lfdr <- localFDR(alpha_hat, beta_hat, var_alpha, var_beta, twostep = FALSE)
-#' MLFDR(lfdr, size = 0.05)
+#' print(lfdr$pi)
+#' MLFDR(lfdr$lfdr, size = 0.05)
 
 MLFDR <- function(lfdr, size = 0.05){
   m = length(lfdr)

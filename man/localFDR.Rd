@@ -57,7 +57,7 @@ localFDR(
 \item{method}{either "unicore" or "multicore", specifies whether parallelization should be used when estimating variances in two step EM. Is not used unless twostep = TRUE}
 }
 \value{
-A vector of local false discovery rates
+A list consisting of two elements - lfdr, a vector of local false discovery rates and pi, the estimated mixture proportions
 }
 \description{
 localFDR: A function that fits a Gaussian Mixture model to the mediation coefficients and returns the localFDR estimated from the mixture model

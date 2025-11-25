@@ -153,10 +153,10 @@ EM_fun <- function(coeff_mat, k = 4, var_alpha, var_beta ,lambda.init = NULL, ka
   }
 
   if (iter == maxit) {
-    cat("WARNING! NOT CONVERGENT!", "\n")
+    warning("WARNING! NOT CONVERGENT!", "\n")
   }
-  #colnames(z) <- c(paste("comp", ".", 1:k, sep = ""))
-  cat("number of iterations=", iter, "\n")
+
+  if(verbose) cat("number of iterations=", iter, "\n")
   a = list(coeff_mat = coeff_mat, lambda = lambda, mu = mu, sigma = sigma,
            loglik = newobsloglik, posterior = z, all.loglik = ll, restarts = restarts)
   #class(a) = "mixEM"
@@ -191,7 +191,7 @@ LL.complete.1 = function(kappa, lambda, mu, var_coeff, x, z)
 }
 
 
-EM_fun.1 <- function(coeff, var_coeff, k, epsilon = 1e-02, maxit = 10000, lambda.init = NULL, mu.init = NULL, method = "multicore", mc.cores = detectCores()-1){
+EM_fun.1 <- function(coeff, var_coeff, k, epsilon = 1e-02, maxit = 10000, lambda.init = NULL, mu.init = NULL, method = "multicore", mc.cores = detectCores()-1, verbose = FALSE){
   mc_settings <- list(
     mc.cores = detectCores() - 1,        # Use 4 cores
     mc.set.seed = TRUE,  # Set seed for reproducibility
@@ -260,6 +260,7 @@ EM_fun.1 <- function(coeff, var_coeff, k, epsilon = 1e-02, maxit = 10000, lambda
         z = z,
         lower = lower_bounds,
         upper = upper_bounds,
+        printDetail = verbose,
         method = "multicore",
         mc.control = list(mc.silent = TRUE, mc.cores = mc.cores)
       ),
@@ -291,13 +292,13 @@ EM_fun.1 <- function(coeff, var_coeff, k, epsilon = 1e-02, maxit = 10000, lambda
     ll <- newobsloglik
     iter <- iter + 1
     if(diff < 0){
-      cat("WARNING! log-likelihood has decreased!", "\n")
+      warning("WARNING! log-likelihood has decreased!", "\n")
     }
   }
   if (iter == maxit) {
-    cat("WARNING! NOT CONVERGENT!", "\n")
+    warning("WARNING! NOT CONVERGENT!", "\n")
   }
-  cat("number of iterations=", iter, "\n")
+  if(verbose) cat("number of iterations=", iter, "\n")
   a = list(coeff = coeff, lambda = lambda, mu = mu, var_mat = var_mat,
            loglik = newobsloglik, posterior = z)
   #class(a) = "mixEM"

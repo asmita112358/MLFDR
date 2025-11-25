@@ -53,5 +53,6 @@ for(i in 1:m)
   var_beta[i] = table2["M[i, ]",2]^2
 }
 lfdr <- localFDR(alpha_hat, beta_hat, var_alpha, var_beta, twostep = FALSE)
-MLFDR(lfdr, size = 0.05)
+print(lfdr$pi)
+MLFDR(lfdr$lfdr, size = 0.05)
 }
