@@ -9,7 +9,7 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: Implements a high dimensional mediation analysis algorithm using Local False Discovery Rates. The methodology is described in Roy and Zhang (2024) <https://doi.org/10.48550/arXiv.2402.13933>.
+Description: Implements a high dimensional mediation analysis algorithm using Local False Discovery Rates. The methodology is described in Roy and Zhang (2024) <https://arxiv.org/abs/2402.13933>.
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
