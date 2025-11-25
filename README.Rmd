@@ -80,8 +80,8 @@ for(i in 1:m)
 }
 
 lfdr <- localFDR(alpha_hat, beta_hat, var_alpha, var_beta, twostep = FALSE)
-
-rej = MLFDR(lfdr, size = 0.05)
+print(lfdr$pi)
+rej = MLFDR(lfdr$lfdr, size = 0.05)
 fdr <- sum(rej*tn)/max(1,sum(rej))
 power <- sum(rej*tp)/sum(tp)
 

@@ -23,8 +23,18 @@ You can install the development version of MLFDR from
 ``` r
 devtools::install_github("asmita112358/MLFDR")
 #> Using GitHub PAT from the git credential store.
-#> Skipping install of 'MLFDR' from a github remote, the SHA1 (7ff811dd) has not changed since last install.
-#>   Use `force = TRUE` to force installation
+#> Downloading GitHub repo asmita112358/MLFDR@HEAD
+#> 
+#> ── R CMD build ─────────────────────────────────────────────────────────────────
+#>      checking for file ‘/private/var/folders/mk/vjmxbpp92m750qctwwm_qn440000gn/T/RtmpiSHtim/remotes4944626e5e69/asmita112358-MLFDR-37db225/DESCRIPTION’ ...  ✔  checking for file ‘/private/var/folders/mk/vjmxbpp92m750qctwwm_qn440000gn/T/RtmpiSHtim/remotes4944626e5e69/asmita112358-MLFDR-37db225/DESCRIPTION’
+#>   ─  preparing ‘MLFDR’:
+#>      checking DESCRIPTION meta-information ...  ✔  checking DESCRIPTION meta-information
+#>   ─  checking for LF line-endings in source and make files and shell scripts
+#>   ─  checking for empty or unneeded directories
+#>    Omitted ‘LazyData’ from DESCRIPTION
+#>   ─  building ‘MLFDR_0.1.0.tar.gz’
+#>      
+#> 
 ```
 
 ## Example
@@ -81,24 +91,29 @@ for(i in 1:m)
 }
 
 lfdr <- localFDR(alpha_hat, beta_hat, var_alpha, var_beta, twostep = FALSE)
-#> iteration= 0 loglik= -1788.283 
-#> iteration= 1 loglik= -1764.573 
-#> iteration= 2 loglik= -1760.03 
-#> iteration= 3 loglik= -1758.486 
-#> iteration= 4 loglik= -1757.895 
-#> iteration= 5 loglik= -1757.657 
-#> iteration= 6 loglik= -1757.559 
-#> iteration= 7 loglik= -1757.518 
-#> iteration= 8 loglik= -1757.5 
-#> iteration= 9 loglik= -1757.493 
+#> iteration= 0 loglik= -2019.293 
+#> iteration= 1 loglik= -1988.861 
+#> iteration= 2 loglik= -1984.51 
+#> iteration= 3 loglik= -1983.162 
+#> iteration= 4 loglik= -1982.668 
+#> iteration= 5 loglik= -1982.477 
+#> iteration= 6 loglik= -1982.401 
+#> iteration= 7 loglik= -1982.37 
+#> iteration= 8 loglik= -1982.358 
+#> iteration= 9 loglik= -1982.353 
 #> number of iterations= 10
-
-rej = MLFDR(lfdr, size = 0.05)
+print(lfdr$pi)
+#>   H_alpha H_beta       prob
+#> 1       0      0 0.36500291
+#> 2       1      0 0.09294027
+#> 3       0      1 0.29634692
+#> 4       1      1 0.24570990
+rej = MLFDR(lfdr$lfdr, size = 0.05)
 fdr <- sum(rej*tn)/max(1,sum(rej))
 power <- sum(rej*tp)/sum(tp)
 
 print(paste("FDR:", round(fdr,4)))
-#> [1] "FDR: 0.0364"
+#> [1] "FDR: 0.0464"
 print(paste("Power:", round(power,4)))
-#> [1] "Power: 0.5327"
+#> [1] "Power: 0.6128"
 ```
