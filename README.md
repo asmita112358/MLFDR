@@ -3,6 +3,9 @@
 
 # MLFDR
 
+## Update
+This package is now available in CRAN.
+
 ## Overview
 
 The package MLFDR implements a local-FDR based solution to the high
